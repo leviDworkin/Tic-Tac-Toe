@@ -10,7 +10,7 @@ using namespace std;
 class Board{
   private:
     Slot** arr;
-    int size;
+    int _size;
   public:
     //Constructor and Destructor
     Board(int newSize);
@@ -18,10 +18,10 @@ class Board{
     ~Board();
     //Methods
     friend std::ostream& operator<< (std::ostream& o, Board const& b);
-    Slot& operator[](const Coordinate& c);
+    Slot& operator[](const Coordinate& c)const;
     Board& operator=(char c);
     Board& operator=(const Board& other);
-    const int getSize()const{
-      return size;
+    const uint size()const{
+      return (uint)_size;
     }
 };

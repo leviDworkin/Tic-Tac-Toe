@@ -4,14 +4,14 @@ using namespace std;
 
 class Coordinate{
   private:
-    int x,y;
+    uint x,y;
   public:
-    Coordinate(int newX, int newY): x(newX),y(newY) {}
+    Coordinate(uint newX, uint newY): x(newX),y(newY) {}
     Coordinate(const Coordinate& other): x(other.x), y(other.y) {}
-    int getX()const{
+    uint getX()const{
       return x;
     }
-    int getY()const{
+    uint getY()const{
       return y;
     }
 };

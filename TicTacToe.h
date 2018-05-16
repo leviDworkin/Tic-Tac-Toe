@@ -3,66 +3,95 @@
 #include "Player.h"
 
 class TicTacToe{
-  private:
-    Board gameBoard;
-    char won;
-    Player p;
   public:
-    TicTacToe(int size): gameBoard(size) {}
-    TicTacToe& play(const Player& x,const Player& o){
+    TicTacToe(uint size): gameBoard(size) {}
+    TicTacToe& play(Player& x,Player& o){
       gameBoard = '.';
       int turn =0;
-      while( check() ){
+      for(uint i=0; i<gameBoard.size()*gameBoard.size(); i++ ){
           if(turn==0){
+            if( isIllegal(gameBoard[x.play(gameBoard)]) ){
+              p = &o;
+              p->setChar('O');
+              break;
+            }
             gameBoard[x.play(gameBoard)]='X';
             turn=1;
+            if(isWinner('X')){
+              p = &x;
+              p->setChar('X');
+              break;
+            }
           }else{
+            if( isIllegal(gameBoard[o.play(gameBoard)]) ){
+              p = &x;
+              p->setChar('X');
+              break;
+            }
             gameBoard[o.play(gameBoard)]='O';
             turn=0;
+            if(isWinner('O')){
+              p = &o;
+              p->setChar('O');
+              break;
+            }
           }
       }
       return *this;
     }
-    Board& board(){
+    Board board()const{
       return gameBoard;
     }
-    Player& winner();//returns the winner if there is a tie the winner is the o player
-    bool check(){
-      if(verticalWin() || horizontalWin() || digonalWin()){
-
-          return false;
-      }
-      return true;
+    Player& winner()const{
+      return *p;
     }
-    bool horizontalWin(){
-      int countx=0 , counto=0;
-      for (size_t i = 0; i < gameBoard.size(); i++) {
-        for (size_t j = 0; j < gameBoard.size(); j++) {
-            if(gameBoard[{i,j}]=='X'){
-              countx++; counto=0;
-            }else if(gameBoard[{i,j}]=='O'){
-              counto++; countx=0;
-            }else{
-              countx=0; counto=0;
-            }
-        }
-        if(countx==gameBoard.size()){
-          won = 'X';
+
+  private:
+    Board gameBoard;
+    char won;
+    Player* p;
+
+    bool horizontalWin(char c){
+      for (uint i = 0; i < gameBoard.size(); i++) {
+        if(checkHorizontal(i,c)){
           return true;
         }
-        if(counto==gameBoard.size()){
-          won = 'O';
-          return true;
-        }
-        countx=0; counto=0;
       }
       return false;
     }
-    bool verticalWin(){
-      for (size_t i = 0; i < gameBoard.size(); i++) {
-        for (size_t j = 0; j < gameBoard.size(); j++){
-          if()
+    bool verticalWin(char c){
+      for (uint i = 0; i < gameBoard.size(); i++) {
+        if(checkVertical(i,c)){
+          return true;
         }
       }
+      return false;
+    }
+    bool checkHorizontal(uint i, char c){
+      for (uint j = 0; j < gameBoard.size(); j++) {
+        if(gameBoard[{i,j}]!=c){
+          return false;
+        }
+      }
+      return true;
+    }
+    bool checkVertical(uint i, char c){
+      for (uint j = 0; j < gameBoard.size(); j++) {
+        if(gameBoard[{j,i}]!=c){
+          return false;
+        }
+      }
+      return true;
+    }
+    bool isWinner(char c){
+      if(horizontalWin(c) || verticalWin(c))
+        return true;
+      return false;
+    }
+    bool isIllegal(const Slot& s){
+      if (s=='X' || s=='O') {
+        return true;
+      }
+      return false;
     }
 };

@@ -40,6 +40,11 @@ class Slot{
         return true;
       return false;
     }
+    bool operator!=(char other)const{
+      if(c!=other)
+        return true;
+      return false;
+    }
     char getChar()const{
       return c;
     }

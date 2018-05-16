@@ -1,47 +1,47 @@
 #include "Board.h"
 
 //Constructor and Destructor
-Board::Board(int newSize){
-  size = newSize;
-  arr = new Slot*[size];
-  for(int i=0; i<size; i++){
-    arr[i] = new Slot[size];
+Board::Board(int new_size){
+  _size = new_size;
+  arr = new Slot*[_size];
+  for(int i=0; i<_size; i++){
+    arr[i] = new Slot[_size];
   }
 }
 Board::Board(const Board& other){
-  size = other.size;
-  arr = new Slot*[size];
-  for(int i = 0 ; i < size ; i++){
-      arr[i] = new Slot[size];
-      for (int j = 0; j < size; j++) {
+  _size = other._size;
+  arr = new Slot*[_size];
+  for(int i = 0 ; i < _size ; i++){
+      arr[i] = new Slot[_size];
+      for (int j = 0; j < _size; j++) {
         arr[i][j].insert(other.arr[i][j].getChar());
       }
   }
 }
 Board::~Board(){
-  for (int i = 0; i < size; i++) {
+  for (int i = 0; i < _size; i++) {
     delete[] arr[i];
   }
   delete[] arr;
 }
 //operator overloads
 ostream& operator<< (ostream& o, Board const& b){
-  for(int i=0;i<b.size;i++){
-    for(int j=0;j<b.size;j++){
+  for(int i=0;i<b._size;i++){
+    for(int j=0;j<b._size;j++){
       o << b.arr[i][j];
     }
     o << "\n";
   }
   return o;
 }
-Slot& Board::operator[](const Coordinate& c){
-  if(c.getX()>=size || c.getY()>=size || c.getX()<0 || c.getY()<0)
+Slot& Board::operator[](const Coordinate& c)const{
+  if(c.getX()>=_size || c.getY()>=_size)
     throw IllegalCoordinateException(c);
   return arr[c.getX()][c.getY()];
 }
 Board& Board::operator=(char c){
-  for(int i=0;i<size;i++){
-    for(int j=0;j<size;j++){
+  for(int i=0;i<_size;i++){
+    for(int j=0;j<_size;j++){
       arr[i][j].insert(c);
     }
   }
@@ -49,12 +49,12 @@ Board& Board::operator=(char c){
 }
 Board& Board::operator=(const Board& other){
     this->~Board();
-    size = other.size;
-    arr = new Slot*[size];
-    for(int i = 0 ; i < size ; i++)
+    _size = other._size;
+    arr = new Slot*[_size];
+    for(int i = 0 ; i < _size ; i++)
     {
-        arr[i] = new Slot[size];
-        for(int j = 0; j < size; j++)
+        arr[i] = new Slot[_size];
+        for(int j = 0; j < _size; j++)
         {
             arr[i][j] = other.arr[i][j];
         }
