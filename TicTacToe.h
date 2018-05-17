@@ -109,11 +109,11 @@ class TicTacToe{
       return false;
     }
     bool diagonalWin(char c){
-      for (size_t i=0 ,j = 0; i < gameBoard.size(); i++, j++) {
+      for (uint i=0 ,j = 0; i < gameBoard.size(); i++, j++) {
         if(gameBoard[{i,j}] != c)
           return false;
       }
-      for (size_t i=gameBoard.size()-1 ,j = gameBoard.size()-1; i >= 0; i--, j--) {
+      for (uint i=gameBoard.size()-1 ,j = gameBoard.size()-1; i >= 0; i--, j--) {
         if(gameBoard[{i,j}] != c)
           return false;
       }
