@@ -10,11 +10,18 @@ class TicTacToe{
       int turn =0;
       for(uint i=0; i<gameBoard.size()*gameBoard.size(); i++ ){
           if(turn==0){
-            if( isIllegal(gameBoard[x.play(gameBoard)]) ){
+            try{
+              if( isIllegal(gameBoard[x.play(gameBoard)]) ){
+                p = &o;
+                p->setChar('O');
+                break;
+              }
+            }catch(...){
               p = &o;
               p->setChar('O');
               break;
             }
+
             gameBoard[x.play(gameBoard)]='X';
             turn=1;
             if(isWinner('X')){
@@ -23,11 +30,18 @@ class TicTacToe{
               break;
             }
           }else{
-            if( isIllegal(gameBoard[o.play(gameBoard)]) ){
+            try{
+              if( isIllegal(gameBoard[o.play(gameBoard)]) ){
+                p = &x;
+                p->setChar('X');
+                break;
+              }
+            }catch(...){
               p = &x;
               p->setChar('X');
               break;
             }
+
             gameBoard[o.play(gameBoard)]='O';
             turn=0;
             if(isWinner('O')){

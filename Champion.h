@@ -7,7 +7,9 @@ class Champion: public Player{
   public:
     Champion(char c): playingAs(c) {}
     const string name() const override { return "Levi"; }
-  	const Coordinate play(const Board& board) override;
+  	const Coordinate play(const Board& board) override{
+      return {0,0};
+    }
     char getChar()const{
       return playingAs;
     }
