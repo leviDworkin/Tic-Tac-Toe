@@ -8,6 +8,6 @@ class Champion: public Player{
       return {0,0};
     }
     char getChar()const{
-      return playingAs;
+      return this->myChar;
     }
 };
