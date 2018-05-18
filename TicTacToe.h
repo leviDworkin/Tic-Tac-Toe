@@ -12,41 +12,35 @@ class TicTacToe{
           if(turn==0){
             try{
               if( isIllegal(gameBoard[x.play(gameBoard)]) ){
-                p = &o;
-                p->setChar('O');
+                oWins(&o);
                 break;
               }
             }catch(...){
-              p = &o;
-              p->setChar('O');
+              oWins(&o);
               break;
             }
 
             gameBoard[x.play(gameBoard)]='X';
             turn=1;
             if(isWinner('X')){
-              p = &x;
-              p->setChar('X');
+              xWins(&x);
               break;
             }
           }else{
             try{
               if( isIllegal(gameBoard[o.play(gameBoard)]) ){
-                p = &x;
-                p->setChar('X');
+                xWins(&x);
                 break;
               }
             }catch(...){
-              p = &x;
-              p->setChar('X');
+              xWins(&x);
               break;
             }
 
             gameBoard[o.play(gameBoard)]='O';
             turn=0;
             if(isWinner('O')){
-              p = &o;
-              p->setChar('O');
+              oWins(&o);
               break;
             }
           }
@@ -65,6 +59,14 @@ class TicTacToe{
     char won;
     Player* p;
 
+    void oWins(Player* o){
+      p = o;
+      p->setChar('O');
+    }
+    void xWins(Player* x){
+      p = x;
+      p->setChar('X');
+    }
     bool horizontalWin(char c){
       for (uint i = 0; i < gameBoard.size(); i++) {
         if(checkHorizontal(i,c)){
@@ -98,7 +100,7 @@ class TicTacToe{
       return true;
     }
     bool isWinner(char c){
-      if(horizontalWin(c) || verticalWin(c) || diagonalWin(c))
+      if(horizontalWin(c) || verticalWin(c) /*|| diagonalWin(c)*/)
         return true;
       return false;
     }
@@ -108,16 +110,15 @@ class TicTacToe{
       }
       return false;
     }
-    bool diagonalWin(char c){
-      for (uint i=0 ,j = 0; i < gameBoard.size(); i++, j++) {
-        if(gameBoard[{i,j}] != c)
-          return false;
-      }
-      for (uint i=gameBoard.size()-1 ,j = gameBoard.size()-1; i >= 0; i--, j--) {
-        if(gameBoard[{i,j}] != c)
-          return false;
-      }
-      return true;
-
-    }
+    // bool diagonalWin(char c){
+    //   for (uint i=0 ,j = 0; i < gameBoard.size(); i++, j++) {
+    //     if(gameBoard[{i,j}] != c)
+    //       return false;
+    //   }
+    //   for (uint i=gameBoard.size()-1 ,j = gameBoard.size()-1; i >= 0; i--, j--) {
+    //     if(gameBoard[{i,j}] != c)
+    //       return false;
+    //   }
+    //   return true;
+    // }
 };
