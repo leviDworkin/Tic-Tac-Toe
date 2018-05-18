@@ -7,7 +7,4 @@ class Champion: public Player{
   	const Coordinate play(const Board& board) override{
       return {0,0};
     }
-    // char getChar()const{
-    //   return this->myChar;
-    // }
 };

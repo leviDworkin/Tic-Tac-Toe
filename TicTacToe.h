@@ -19,7 +19,6 @@ class TicTacToe{
               oWins(&o);
               break;
             }
-
             gameBoard[x.play(gameBoard)]='X';
             turn=1;
             if(isWinner('X')){
@@ -36,7 +35,6 @@ class TicTacToe{
               xWins(&x);
               break;
             }
-
             gameBoard[o.play(gameBoard)]='O';
             turn=0;
             if(isWinner('O')){
@@ -45,6 +43,8 @@ class TicTacToe{
             }
           }
       }
+      if(isTie())
+        oWins(&o);
       return *this;
     }
     Board board()const{
@@ -109,6 +109,11 @@ class TicTacToe{
         return true;
       }
       return false;
+    }
+    bool isTie(){
+      if(!isWinner('O') && !isWinner('X'))
+        return true;
+      return false;  
     }
     // bool diagonalWin(char c){
     //   for (uint i=0 ,j = 0; i < gameBoard.size(); i++, j++) {
