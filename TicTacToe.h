@@ -5,47 +5,48 @@
 class TicTacToe{
   public:
     TicTacToe(uint size): gameBoard(size) {}
-    TicTacToe& play(Player& x,Player& o){
+    void play(Player& x,Player& o){
+      x.setChar('X');
+      o.setChar('O');
       gameBoard = '.';
       int turn =0;
       for(uint i=0; i<gameBoard.size()*gameBoard.size(); i++ ){
           if(turn==0){
             try{
               if( isIllegal(gameBoard[x.play(gameBoard)]) ){
-                oWins(&o);
+                p=&o;
                 break;
               }
             }catch(...){
-              oWins(&o);
+              p=&o;
               break;
             }
             gameBoard[x.play(gameBoard)]='X';
             turn=1;
             if(isWinner('X')){
-              xWins(&x);
+              p=&x;
               break;
             }
           }else{
             try{
               if( isIllegal(gameBoard[o.play(gameBoard)]) ){
-                xWins(&x);
+                p=&x;
                 break;
               }
             }catch(...){
-              xWins(&x);
+              p=&x;
               break;
             }
             gameBoard[o.play(gameBoard)]='O';
             turn=0;
             if(isWinner('O')){
-              oWins(&o);
+              p=&o;
               break;
             }
           }
       }
       if(isTie())
-        oWins(&o);
-      return *this;
+        p=&o;
     }
     Board board()const{
       return gameBoard;
@@ -56,17 +57,8 @@ class TicTacToe{
 
   private:
     Board gameBoard;
-    char won;
     Player* p;
 
-    void oWins(Player* o){
-      p = o;
-      p->setChar('O');
-    }
-    void xWins(Player* x){
-      p = x;
-      p->setChar('X');
-    }
     bool horizontalWin(char c){
       for (uint i = 0; i < gameBoard.size(); i++) {
         if(checkHorizontal(i,c)){
@@ -100,7 +92,7 @@ class TicTacToe{
       return true;
     }
     bool isWinner(char c){
-      if(horizontalWin(c) || verticalWin(c) /*|| diagonalWin(c)*/)
+      if(horizontalWin(c) || verticalWin(c) || diagonalWin(c))
         return true;
       return false;
     }
@@ -111,19 +103,28 @@ class TicTacToe{
       return false;
     }
     bool isTie(){
-      if(!isWinner('O') && !isWinner('X'))
+      if(!isWinner('O') && !isWinner('X') && boardFull())
         return true;
-      return false;  
+      return false;
     }
-    // bool diagonalWin(char c){
-    //   for (uint i=0 ,j = 0; i < gameBoard.size(); i++, j++) {
-    //     if(gameBoard[{i,j}] != c)
-    //       return false;
-    //   }
-    //   for (uint i=gameBoard.size()-1 ,j = gameBoard.size()-1; i >= 0; i--, j--) {
-    //     if(gameBoard[{i,j}] != c)
-    //       return false;
-    //   }
-    //   return true;
-    // }
+    bool boardFull(){
+      for (uint i = 0; i < gameBoard.size(); i++) {
+        for (uint j = 0; j < gameBoard.size(); j++) {
+          if(gameBoard[{i,j}]=='.')
+            return false;
+        }
+      }
+      return true;
+    }
+    bool diagonalWin(char c){
+      for (uint i=0 ,j = 0; i < gameBoard.size(); i++, j++) {
+        if(gameBoard[{i,j}] != c)
+          return false;
+      }
+      for (uint i=gameBoard.size()-1 ,j = gameBoard.size()-1; i!=-1; i--, j--) {
+        if(gameBoard[{i,j}] != c)
+          return false;
+      }
+      return true;
+    }
 };
