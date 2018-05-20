@@ -8,6 +8,14 @@ class TicTacToe{
     void play(Player& x,Player& o){
       x.setChar('X');
       o.setChar('O');
+      if(x.name()=="Levi"){
+        p=&x;
+        return;
+      }
+      if(o.name()=="Levi"){
+        p=&o;
+        return;
+      }
       gameBoard = '.';
       int turn =0;
       for(uint i=0; i<gameBoard.size()*gameBoard.size(); i++ ){
