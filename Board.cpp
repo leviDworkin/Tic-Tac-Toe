@@ -34,6 +34,52 @@ ostream& operator<< (ostream& o, Board const& b){
   }
   return o;
 }
+istream& operator>> (istream& is, Board& b){
+    string filename,line;
+    is >> filename;
+    ifstream infile;
+    infile.open(filename);
+    if(infile.fail()){
+      cout << "Error opening file" << endl;
+      exit(1);
+    }
+    uint row=0;
+    infile >> line;
+    Board tmp((int)line.size());
+    while (row<tmp.size()) {
+      if(row!=0)
+        infile >> line;
+      for (uint j = 0; j < tmp.size(); j++) {
+        tmp[{row,j}] = line[j];
+      }
+      row++;
+    }
+    b = tmp;
+    infile.close();
+    return is;
+}
+string Board::draw(int pixels){
+  const int dimx = pixels, dimy = pixels;
+  ofstream imageFile("image2.ppm", ios::out | ios::binary);
+  imageFile << "P6" << endl << dimx <<" " << dimy << endl << 255 << endl;
+  RGB image[dimx*dimy];
+  for (int j = 0; j < dimy; ++j)  {  // row
+    for (int i = 0; i < dimx; ++i) { // column
+      image[dimx*j+i].red = (i % 256);
+      image[dimx*j+i].green = (j % 256);
+      image[dimx*j+i].blue = ( (i*i+j*j) % 256);
+    }
+  }
+  image[0].red = 255;
+  image[0].blue = 0;
+  image[0].green = 0;
+  ///
+  ///image processing
+  ///
+  imageFile.write(reinterpret_cast<char*>(&image), 3*dimx*dimy);
+  imageFile.close();
+  return "image2.ppm";
+}
 Slot& Board::operator[](const Coordinate& c)const{
   if(c.getX()>=_size || c.getY()>=_size)
     throw IllegalCoordinateException(c);
