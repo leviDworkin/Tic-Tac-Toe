@@ -59,28 +59,7 @@ string Board::draw(int pixels){
   ofstream imageFile("image2.ppm", ios::out | ios::binary);
   imageFile << "P6" << endl << dimx <<" " << dimy << endl << 255 << endl;
 
-  RGB image[dimx*dimy];
-  // for (int i = 0; i < _size; ++i)  {  // row
-  //   for (int j = 0; j < _size; ++j) { // column
-  //
-  //     for (int k = i*bound; k < 2*bound; k++) {
-  //       for (int r = j*bound; r < bound; r++) {
-  //         if (arr[i][j]=='X'){
-  //
-  //         }
-  //       }
-  //     }
-  //
-  //     // image[dimx*j+i].red = 0;
-  //     // image[dimx*j+i].green = 0;
-  //     // image[dimx*j+i].blue = 255;
-  //     image[dimx*i+j].green = 255;
-  //   }
-  // }
-  //        static int counter=1;
-  //        string name= "board(";
-  //        name+=to_string(counter++)+").ppm";
-
+  RGB* image = new RGB[dimx*dimy];
 	size_t counterx=0;
   size_t countery=0;
 	for (size_t i = 0; i <_size ; ++i) {
@@ -102,7 +81,7 @@ string Board::draw(int pixels){
 			}else{
         for (int k = counterx*bound; k <(counterx+1)*bound ; ++k) {
             for (int l = countery*bound; l <(countery+1)*bound ; ++l) {
-                image[dimx*l+k].green = 0;
+                image[dimx*l+k].blue = 0;
             }
         }
         counterx++;
@@ -113,9 +92,9 @@ string Board::draw(int pixels){
 	}
 
   ///image processing
-  ///
-  imageFile.write(reinterpret_cast<char*>(&image), 3*dimx*dimy);
+  imageFile.write(reinterpret_cast<char*>(image), 3*dimx*dimy);
   imageFile.close();
+  delete[] image;
   return "image2.ppm";
 }
 Slot& Board::operator[](const Coordinate& c)const{
