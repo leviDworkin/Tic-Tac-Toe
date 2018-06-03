@@ -23,8 +23,8 @@ void playAndPrintWinner(TicTacToe& game, Player& xPlayer, Player& oPlayer) {
 }
 int main() {
 	Board board;
-	// cin >> board;
-	// cout<<board<<endl;
+	cin >> board;
+	cout<<board<<endl;
 	string filename = board.draw(600);
 	cout << filename << endl;
 // 	TicTacToe game(4);       // Initializes a game on a 4x4 board

@@ -35,45 +35,83 @@ ostream& operator<< (ostream& o, Board const& b){
   return o;
 }
 istream& operator>> (istream& is, Board& b){
-    string filename,line;
-    is >> filename;
-    ifstream infile;
-    infile.open(filename);
-    if(infile.fail()){
+    string line;
+    is >> line;
+    if(is.fail()){
       cout << "Error opening file" << endl;
       exit(1);
     }
     uint row=0;
-    infile >> line;
     Board tmp((int)line.size());
     while (row<tmp.size()) {
-      if(row!=0)
-        infile >> line;
       for (uint j = 0; j < tmp.size(); j++) {
         tmp[{row,j}] = line[j];
       }
+      is>>line;
       row++;
     }
     b = tmp;
-    infile.close();
     return is;
 }
 string Board::draw(int pixels){
   const int dimx = pixels, dimy = pixels;
+  int bound = pixels/_size;
   ofstream imageFile("image2.ppm", ios::out | ios::binary);
   imageFile << "P6" << endl << dimx <<" " << dimy << endl << 255 << endl;
+
   RGB image[dimx*dimy];
-  for (int j = 0; j < dimy; ++j)  {  // row
-    for (int i = 0; i < dimx; ++i) { // column
-      image[dimx*j+i].red = (i % 256);
-      image[dimx*j+i].green = (j % 256);
-      image[dimx*j+i].blue = ( (i*i+j*j) % 256);
-    }
-  }
-  image[0].red = 255;
-  image[0].blue = 0;
-  image[0].green = 0;
-  ///
+  // for (int i = 0; i < _size; ++i)  {  // row
+  //   for (int j = 0; j < _size; ++j) { // column
+  //
+  //     for (int k = i*bound; k < 2*bound; k++) {
+  //       for (int r = j*bound; r < bound; r++) {
+  //         if (arr[i][j]=='X'){
+  //
+  //         }
+  //       }
+  //     }
+  //
+  //     // image[dimx*j+i].red = 0;
+  //     // image[dimx*j+i].green = 0;
+  //     // image[dimx*j+i].blue = 255;
+  //     image[dimx*i+j].green = 255;
+  //   }
+  // }
+  //        static int counter=1;
+  //        string name= "board(";
+  //        name+=to_string(counter++)+").ppm";
+
+	size_t counterx=0;
+  size_t countery=0;
+	for (size_t i = 0; i <_size ; ++i) {
+		for (size_t j = 0; j <_size ; ++j) {
+			if (arr[i][j] == 'X'){
+				for (int k = counterx*bound; k <(counterx+1)*bound ; ++k) {
+          for (int l = countery*bound; l <(countery+1)*bound ; ++l) {
+              image[dimx*l+k].red = (255);
+          }
+				}
+        counterx++;
+			}else if (arr[i][j] == 'O'){
+        for (int k = counterx*bound; k <(counterx+1)*bound ; ++k) {
+            for (int l = countery*bound; l <(countery+1)*bound ; ++l) {
+                image[dimx*l+k].green = (255);
+            }
+        }
+        counterx++;
+			}else{
+        for (int k = counterx*bound; k <(counterx+1)*bound ; ++k) {
+            for (int l = countery*bound; l <(countery+1)*bound ; ++l) {
+                image[dimx*l+k].green = 0;
+            }
+        }
+        counterx++;
+      }
+		}
+   counterx=0;
+   countery++;
+	}
+
   ///image processing
   ///
   imageFile.write(reinterpret_cast<char*>(&image), 3*dimx*dimy);
