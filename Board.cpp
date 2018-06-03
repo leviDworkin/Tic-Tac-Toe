@@ -56,7 +56,16 @@ istream& operator>> (istream& is, Board& b){
 string Board::draw(int pixels){
   const int dimx = pixels, dimy = pixels;
   int bound = pixels/_size;
-  ofstream imageFile("image2.ppm", ios::out | ios::binary);
+  static int count = 0;
+  struct stat buffer;
+  string filename = "image";
+  string file = filename+".ppm";
+  while(stat(file.c_str(),&buffer)==0){
+    file = filename+"("+to_string(count)+").ppm";
+    count++;
+  }
+  filename = file;
+  ofstream imageFile(filename, ios::out | ios::binary);
   imageFile << "P6" << endl << dimx <<" " << dimy << endl << 255 << endl;
 
   RGB* image = new RGB[dimx*dimy];
@@ -95,7 +104,7 @@ string Board::draw(int pixels){
   imageFile.write(reinterpret_cast<char*>(image), 3*dimx*dimy);
   imageFile.close();
   delete[] image;
-  return "image2.ppm";
+  return filename;
 }
 Slot& Board::operator[](const Coordinate& c)const{
   if(c.getX()>=_size || c.getY()>=_size)

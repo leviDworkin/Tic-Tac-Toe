@@ -7,6 +7,7 @@ using namespace std;
 #include "board/Coordinate.h"
 #include <string>
 #include <fstream>
+#include <sys/stat.h>
 
 class Board{
   private:
